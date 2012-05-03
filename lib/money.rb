@@ -22,7 +22,7 @@
 
 require 'bigdecimal'
 require 'i18n' rescue LoadError
-require 'money/currency_loader'
-require 'money/currency'
-require 'money/money'
-require 'money/core_extensions'
+require 'bliss-money/currency_loader'
+require 'bliss-money/currency'
+require 'bliss-money/money'
+require 'bliss-money/core_extensions'
