@@ -29,16 +29,16 @@ describe Money do
     end
 
     it "can be used to compare with a String money value" do
-      Money.new(1_00, "USD").should == "1.00"
-      Money.new(1_00, "USD").should_not == "2.00"
-      Money.new(1_00, "GBP").should_not == "1.00"
+      Money.new(1, "USD").should == BigDecimal.new("1.0")
+      Money.new(1, "USD").should_not == "2.00"
+      Money.new(1, "EUR").should_not == "1.00"
     end
 
     it "can be used to compare with a Numeric money value" do
-      Money.new(1_00, "USD").should == 1
-      Money.new(1_57, "USD").should == 1.57
-      Money.new(1_00, "USD").should_not == 2
-      Money.new(1_00, "GBP").should_not == 1
+      Money.new(100, "USD").should == Money.new(100, "USD")
+      Money.new(1.57, "USD").should == 1.57
+      Money.new(1, "USD").should_not == 2
+      Money.new(100, "EUR").should_not == 1
     end
 
     it "can be used to compare with an object that responds to #to_money" do
@@ -55,7 +55,7 @@ describe Money do
       Money.new(1_00, "USD").should == klass.new(Money.new(1_00, "USD"))
       Money.new(2_50, "USD").should == klass.new(Money.new(2_50, "USD"))
       Money.new(2_50, "USD").should_not == klass.new(Money.new(3_00, "USD"))
-      Money.new(1_00, "GBP").should_not == klass.new(Money.new(1_00, "USD"))
+      Money.new(1_00, "EUR").should_not == klass.new(Money.new(1_00, "USD"))
     end
   end
 
@@ -76,16 +76,16 @@ describe Money do
     end
 
     it "can be used to compare with a String money value" do
-      Money.new(1_00, "USD").eql?("1.00").should be true
-      Money.new(1_00, "USD").eql?("2.00").should be false
-      Money.new(1_00, "GBP").eql?("1.00").should be false
+      Money.new(1_00, "USD").eql?(Money.new(100, "USD")).should be true
+      Money.new(1_00, "USD").eql?(Money.new(100, "EUR")).should be false
+      Money.new(1_00, "EUR").eql?(Money.new(200, "EUR")).should be false
     end
 
     it "can be used to compare with a Numeric money value" do
-      Money.new(1_00, "USD").eql?(1).should be true
-      Money.new(1_57, "USD").eql?(1.57).should be true
-      Money.new(1_00, "USD").eql?(2).should be false
-      Money.new(1_00, "GBP").eql?(1).should be false
+      Money.new(1_00, "USD").eql?(Money.new(100, "USD")).should be true
+      Money.new(1_57, "USD").eql?(Money.new(157, "USD")).should be true
+      Money.new(1_00, "USD").eql?(Money.new(200, "USD")).should be false
+      Money.new(1_00, "EUR").eql?(Money.new(100, "USD")).should be false
     end
 
     it "can be used to compare with an object that responds to #to_money" do
@@ -102,7 +102,7 @@ describe Money do
       Money.new(1_00, "USD").eql?(klass.new(Money.new(1_00, "USD"))).should be true
       Money.new(2_50, "USD").eql?(klass.new(Money.new(2_50, "USD"))).should be true
       Money.new(2_50, "USD").eql?(klass.new(Money.new(3_00, "USD"))).should be false
-      Money.new(1_00, "GBP").eql?(klass.new(Money.new(1_00, "USD"))).should be false
+      Money.new(1_00, "EUR").eql?(klass.new(Money.new(1_00, "USD"))).should be false
     end
   end
 
@@ -128,15 +128,15 @@ describe Money do
     end
 
     it "can be used to compare with a String money value" do
-      (Money.new(1_00) <=> "1.00").should == 0
-      (Money.new(1_00) <=> ".99").should > 0
-      (Money.new(1_00) <=> "2.00").should < 0
+      (Money.new(100) <=> 100).should == 0
+      (Money.new(100) <=> 99).should > 0
+      (Money.new(100) <=> 200).should < 0
     end
 
     it "can be used to compare with a Numeric money value" do
-      (Money.new(1_00) <=> 1).should == 0
-      (Money.new(1_00) <=> 0.99).should > 0
-      (Money.new(1_00) <=> 2.00).should < 0
+      (Money.new(100) <=> 100).should == 0
+      (Money.new(100) <=> 99).should > 0
+      (Money.new(100) <=> 200).should < 0
     end
 
     it "can be used to compare with an object that responds to #to_money" do
@@ -241,10 +241,10 @@ describe Money do
   describe "#/" do
     it "divides Money by Fixnum and returns Money" do
       ts = [
-        {:a => Money.new( 13, :USD), :b =>  4, :c => Money.new( 3, :USD)},
-        {:a => Money.new( 13, :USD), :b => -4, :c => Money.new(-4, :USD)},
-        {:a => Money.new(-13, :USD), :b =>  4, :c => Money.new(-4, :USD)},
-        {:a => Money.new(-13, :USD), :b => -4, :c => Money.new( 3, :USD)},
+        {:a => Money.new( 13, :USD), :b =>  4, :c => Money.new( 3.25, :USD)},
+        {:a => Money.new( 13, :USD), :b => -4, :c => Money.new(-3.25, :USD)},
+        {:a => Money.new(-13, :USD), :b =>  4, :c => Money.new(-3.25, :USD)},
+        {:a => Money.new(-13, :USD), :b => -4, :c => Money.new( 3.25, :USD)},
       ]
       ts.each do |t|
         (t[:a] / t[:b]).should == t[:c]
@@ -271,203 +271,8 @@ describe Money do
         {:a => Money.new(-13, :USD), :b => Money.new(-4, :EUR), :c =>  1.625},
       ]
       ts.each do |t|
-        t[:b].should_receive(:exchange_to).once.with(t[:a].currency).and_return(Money.new(t[:b].cents * 2, :USD))
+        t[:b].should_receive(:exchange_to).once.with(t[:a].currency).and_return(Money.new(t[:b].amount * 2, :USD))
         (t[:a] / t[:b]).should == t[:c]
-      end
-    end
-  end
-
-  describe "#div" do
-    it "divides Money by Fixnum and returns Money" do
-      ts = [
-          {:a => Money.new( 13, :USD), :b =>  4, :c => Money.new( 3, :USD)},
-          {:a => Money.new( 13, :USD), :b => -4, :c => Money.new(-4, :USD)},
-          {:a => Money.new(-13, :USD), :b =>  4, :c => Money.new(-4, :USD)},
-          {:a => Money.new(-13, :USD), :b => -4, :c => Money.new( 3, :USD)},
-      ]
-      ts.each do |t|
-        t[:a].div(t[:b]).should == t[:c]
-      end
-    end
-
-    it "divides Money by Money (same currency) and returns Float" do
-      ts = [
-          {:a => Money.new( 13, :USD), :b => Money.new( 4, :USD), :c =>  3.25},
-          {:a => Money.new( 13, :USD), :b => Money.new(-4, :USD), :c => -3.25},
-          {:a => Money.new(-13, :USD), :b => Money.new( 4, :USD), :c => -3.25},
-          {:a => Money.new(-13, :USD), :b => Money.new(-4, :USD), :c =>  3.25},
-      ]
-      ts.each do |t|
-        t[:a].div(t[:b]).should == t[:c]
-      end
-    end
-
-    it "divides Money by Money (different currency) and returns Float" do
-      ts = [
-          {:a => Money.new( 13, :USD), :b => Money.new( 4, :EUR), :c =>  1.625},
-          {:a => Money.new( 13, :USD), :b => Money.new(-4, :EUR), :c => -1.625},
-          {:a => Money.new(-13, :USD), :b => Money.new( 4, :EUR), :c => -1.625},
-          {:a => Money.new(-13, :USD), :b => Money.new(-4, :EUR), :c =>  1.625},
-      ]
-      ts.each do |t|
-        t[:b].should_receive(:exchange_to).once.with(t[:a].currency).and_return(Money.new(t[:b].cents * 2, :USD))
-        t[:a].div(t[:b]).should == t[:c]
-      end
-    end
-  end
-
-  describe "#divmod" do
-    it "calculates division and modulo with Fixnum" do
-      ts = [
-          {:a => Money.new( 13, :USD), :b =>  4, :c => [Money.new( 3, :USD), Money.new( 1, :USD)]},
-          {:a => Money.new( 13, :USD), :b => -4, :c => [Money.new(-4, :USD), Money.new(-3, :USD)]},
-          {:a => Money.new(-13, :USD), :b =>  4, :c => [Money.new(-4, :USD), Money.new( 3, :USD)]},
-          {:a => Money.new(-13, :USD), :b => -4, :c => [Money.new( 3, :USD), Money.new(-1, :USD)]},
-      ]
-      ts.each do |t|
-        t[:a].divmod(t[:b]).should == t[:c]
-      end
-    end
-
-    it "calculates division and modulo with Money (same currency)" do
-      ts = [
-          {:a => Money.new( 13, :USD), :b => Money.new( 4, :USD), :c => [ 3, Money.new( 1, :USD)]},
-          {:a => Money.new( 13, :USD), :b => Money.new(-4, :USD), :c => [-4, Money.new(-3, :USD)]},
-          {:a => Money.new(-13, :USD), :b => Money.new( 4, :USD), :c => [-4, Money.new( 3, :USD)]},
-          {:a => Money.new(-13, :USD), :b => Money.new(-4, :USD), :c => [ 3, Money.new(-1, :USD)]},
-      ]
-      ts.each do |t|
-        t[:a].divmod(t[:b]).should == t[:c]
-      end
-    end
-
-    it "calculates division and modulo with Money (different currency)" do
-      ts = [
-          {:a => Money.new( 13, :USD), :b => Money.new( 4, :EUR), :c => [ 1, Money.new( 5, :USD)]},
-          {:a => Money.new( 13, :USD), :b => Money.new(-4, :EUR), :c => [-2, Money.new(-3, :USD)]},
-          {:a => Money.new(-13, :USD), :b => Money.new( 4, :EUR), :c => [-2, Money.new( 3, :USD)]},
-          {:a => Money.new(-13, :USD), :b => Money.new(-4, :EUR), :c => [ 1, Money.new(-5, :USD)]},
-      ]
-      ts.each do |t|
-        t[:b].should_receive(:exchange_to).once.with(t[:a].currency).and_return(Money.new(t[:b].cents * 2, :USD))
-        t[:a].divmod(t[:b]).should == t[:c]
-      end
-    end
-  end
-
-  describe "#modulo" do
-    it "calculates modulo with Fixnum" do
-      ts = [
-          {:a => Money.new( 13, :USD), :b =>  4, :c => Money.new( 1, :USD)},
-          {:a => Money.new( 13, :USD), :b => -4, :c => Money.new(-3, :USD)},
-          {:a => Money.new(-13, :USD), :b =>  4, :c => Money.new( 3, :USD)},
-          {:a => Money.new(-13, :USD), :b => -4, :c => Money.new(-1, :USD)},
-      ]
-      ts.each do |t|
-        t[:a].modulo(t[:b]).should == t[:c]
-      end
-    end
-
-    it "calculates modulo with Money (same currency)" do
-      ts = [
-          {:a => Money.new( 13, :USD), :b => Money.new( 4, :USD), :c => Money.new( 1, :USD)},
-          {:a => Money.new( 13, :USD), :b => Money.new(-4, :USD), :c => Money.new(-3, :USD)},
-          {:a => Money.new(-13, :USD), :b => Money.new( 4, :USD), :c => Money.new( 3, :USD)},
-          {:a => Money.new(-13, :USD), :b => Money.new(-4, :USD), :c => Money.new(-1, :USD)},
-      ]
-      ts.each do |t|
-        t[:a].modulo(t[:b]).should == t[:c]
-      end
-    end
-
-    it "calculates modulo with Money (different currency)" do
-      ts = [
-          {:a => Money.new( 13, :USD), :b => Money.new( 4, :EUR), :c => Money.new( 5, :USD)},
-          {:a => Money.new( 13, :USD), :b => Money.new(-4, :EUR), :c => Money.new(-3, :USD)},
-          {:a => Money.new(-13, :USD), :b => Money.new( 4, :EUR), :c => Money.new( 3, :USD)},
-          {:a => Money.new(-13, :USD), :b => Money.new(-4, :EUR), :c => Money.new(-5, :USD)},
-      ]
-      ts.each do |t|
-        t[:b].should_receive(:exchange_to).once.with(t[:a].currency).and_return(Money.new(t[:b].cents * 2, :USD))
-        t[:a].modulo(t[:b]).should == t[:c]
-      end
-    end
-  end
-
-  describe "#%" do
-    it "calculates modulo with Fixnum" do
-      ts = [
-          {:a => Money.new( 13, :USD), :b =>  4, :c => Money.new( 1, :USD)},
-          {:a => Money.new( 13, :USD), :b => -4, :c => Money.new(-3, :USD)},
-          {:a => Money.new(-13, :USD), :b =>  4, :c => Money.new( 3, :USD)},
-          {:a => Money.new(-13, :USD), :b => -4, :c => Money.new(-1, :USD)},
-      ]
-      ts.each do |t|
-        (t[:a] % t[:b]).should == t[:c]
-      end
-    end
-
-    it "calculates modulo with Money (same currency)" do
-      ts = [
-          {:a => Money.new( 13, :USD), :b => Money.new( 4, :USD), :c => Money.new( 1, :USD)},
-          {:a => Money.new( 13, :USD), :b => Money.new(-4, :USD), :c => Money.new(-3, :USD)},
-          {:a => Money.new(-13, :USD), :b => Money.new( 4, :USD), :c => Money.new( 3, :USD)},
-          {:a => Money.new(-13, :USD), :b => Money.new(-4, :USD), :c => Money.new(-1, :USD)},
-      ]
-      ts.each do |t|
-        (t[:a] % t[:b]).should == t[:c]
-      end
-    end
-
-    it "calculates modulo with Money (different currency)" do
-      ts = [
-          {:a => Money.new( 13, :USD), :b => Money.new( 4, :EUR), :c => Money.new( 5, :USD)},
-          {:a => Money.new( 13, :USD), :b => Money.new(-4, :EUR), :c => Money.new(-3, :USD)},
-          {:a => Money.new(-13, :USD), :b => Money.new( 4, :EUR), :c => Money.new( 3, :USD)},
-          {:a => Money.new(-13, :USD), :b => Money.new(-4, :EUR), :c => Money.new(-5, :USD)},
-      ]
-      ts.each do |t|
-        t[:b].should_receive(:exchange_to).once.with(t[:a].currency).and_return(Money.new(t[:b].cents * 2, :USD))
-        (t[:a] % t[:b]).should == t[:c]
-      end
-    end
-  end
-
-  describe "#remainder" do
-    it "calculates remainder with Fixnum" do
-      ts = [
-          {:a => Money.new( 13, :USD), :b =>  4, :c => Money.new( 1, :USD)},
-          {:a => Money.new( 13, :USD), :b => -4, :c => Money.new( 1, :USD)},
-          {:a => Money.new(-13, :USD), :b =>  4, :c => Money.new(-1, :USD)},
-          {:a => Money.new(-13, :USD), :b => -4, :c => Money.new(-1, :USD)},
-      ]
-      ts.each do |t|
-        t[:a].remainder(t[:b]).should == t[:c]
-      end
-    end
-
-    it "calculates remainder with Money (same currency)" do
-      ts = [
-          {:a => Money.new( 13, :USD), :b => Money.new( 4, :USD), :c => Money.new( 1, :USD)},
-          {:a => Money.new( 13, :USD), :b => Money.new(-4, :USD), :c => Money.new( 1, :USD)},
-          {:a => Money.new(-13, :USD), :b => Money.new( 4, :USD), :c => Money.new(-1, :USD)},
-          {:a => Money.new(-13, :USD), :b => Money.new(-4, :USD), :c => Money.new(-1, :USD)},
-      ]
-      ts.each do |t|
-        t[:a].remainder(t[:b]).should == t[:c]
-      end
-    end
-
-    it "calculates remainder with Money (different currency)" do
-      ts = [
-          {:a => Money.new( 13, :USD), :b => Money.new( 4, :EUR), :c => Money.new( 5, :USD)},
-          {:a => Money.new( 13, :USD), :b => Money.new(-4, :EUR), :c => Money.new( 5, :USD)},
-          {:a => Money.new(-13, :USD), :b => Money.new( 4, :EUR), :c => Money.new(-5, :USD)},
-          {:a => Money.new(-13, :USD), :b => Money.new(-4, :EUR), :c => Money.new(-5, :USD)},
-      ]
-      ts.each do |t|
-        t[:b].should_receive(:exchange_to).once.with(t[:a].currency).and_return(Money.new(t[:b].cents * 2, :USD))
-        t[:a].remainder(t[:b]).should == t[:c]
       end
     end
   end
@@ -485,7 +290,7 @@ describe Money do
       Money.new(0, "USD").should be_zero
       Money.new(0, "EUR").should be_zero
       Money.new(1, "USD").should_not be_zero
-      Money.new(10, "YEN").should_not be_zero
+      Money.new(10, "CHF").should_not be_zero
       Money.new(-1, "EUR").should_not be_zero
     end
   end
@@ -495,7 +300,7 @@ describe Money do
       Money.new(0, "USD").should_not be_nonzero
       Money.new(0, "EUR").should_not be_nonzero
       Money.new(1, "USD").should be_nonzero
-      Money.new(10, "YEN").should be_nonzero
+      Money.new(10, "CHF").should be_nonzero
       Money.new(-1, "EUR").should be_nonzero
     end
 
