@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    money (5.0.0)
+    bliss-money (1.0.0)
       i18n (~> 0.4)
       json
 
@@ -38,10 +38,10 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  bliss-money!
   guard (~> 1.0.1)
   guard-rspec (~> 0.7.0)
   guard-spork (~> 0.6.1)
-  money!
   rake
   redcarpet (~> 2.1.1)
   rspec (~> 2.9.0)

@@ -5,7 +5,7 @@ CLOBBER.include('doc', '.yardoc')
 
 def gemspec
   @gemspec ||= begin
-    file = File.expand_path("../money.gemspec", __FILE__)
+    file = File.expand_path("../bliss-money.gemspec", __FILE__)
     eval(File.read(file), binding, file)
   end
 end
