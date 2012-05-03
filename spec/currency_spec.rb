@@ -4,7 +4,7 @@ require "spec_helper"
 
 describe Money::Currency do
 
-  FOO = '{ "priority": 1, "iso_code": "FOO", "iso_numeric": "840", "name": "United States Dollar", "symbol": "$", "subunit": "Cent", "subunit_to_unit": 450, "symbol_first": true, "html_entity": "$", "decimal_mark": ".", "thousands_separator": "," }'
+  FOO = '{ "priority": 1, "iso_code": "FOO", "iso_numeric": "840", "name": "United States Dollar", "symbol": "$", "subunit": "Cent", "subunit_to_unit": 450, "fration": 0.01, "symbol_first": true, "html_entity": "$", "decimal_mark": ".", "thousands_separator": "," }'
 
   describe ".find" do
     it "returns currency matching given id" do
@@ -52,7 +52,7 @@ describe Money::Currency do
 
   describe "#<=>" do
     it "compares objects by priority" do
-      Money::Currency.new(:cad).should > Money::Currency.new(:usd)
+      Money::Currency.new(:eur).should > Money::Currency.new(:usd)
       Money::Currency.new(:usd).should < Money::Currency.new(:eur)
     end
   end
@@ -118,13 +118,13 @@ describe Money::Currency do
   describe "#code" do
     it "works as documented" do
       Money::Currency.new(:usd).code.should == "$"
-      Money::Currency.new(:azn).code.should == "AZN"
+      Money::Currency.new(:chf).code.should == "Fr"
     end
   end
 
   describe "#decimal_places" do
     it "proper places for known currency" do
-      Money::Currency.new(:mro).decimal_places == 1
+      Money::Currency.new(:chf).decimal_places == 1
       Money::Currency.new(:usd).decimal_places == 2
     end
 
