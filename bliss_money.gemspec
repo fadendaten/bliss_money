@@ -1,6 +1,6 @@
 # -*- encoding: utf-8 -*-
 Gem::Specification.new do |s|
-  s.name        = "bliss-money"
+  s.name        = "bliss_money"
   s.version     = "1.0.0.1"
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Tobias Luetke", "Hongli Lai", "Jeremy McNevin",
@@ -27,7 +27,7 @@ Gem::Specification.new do |s|
 
   s.files =  Dir.glob("{config,lib,spec}/**/*")
   s.files += %w(CHANGELOG.md LICENSE README.md)
-  s.files += %w(Rakefile .gemtest bliss-money.gemspec)
+  s.files += %w(Rakefile .gemtest bliss_money.gemspec)
 
   s.require_path = "lib"
 end
