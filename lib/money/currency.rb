@@ -13,7 +13,7 @@ class Money
     class UnknownCurrency < StandardError; end
 
     class << self
-
+      
       # Lookup a currency with given +id+ an returns a +Currency+ instance on
       # success, +nil+ otherwise.
       #
@@ -150,6 +150,23 @@ class Money
     #
     # @return [boolean]
     attr_reader :symbol_first
+    
+    # The fraction of this Currency, which is used to round the currency according to the specified fraction.
+    # The fraction is set in the currency.json file, or manually.
+    # Valid fractions are:
+    # 0.01: round exact cents
+    # 0.05: round to the next 5 cents
+    # 0.10: round to the next 10 cents
+    # 1.00: round to the next dollar
+    #
+    # @return [Money::Currency.fraction]
+    attr_accessor :fraction
+    
+    
+    def fraction
+      puts "stored FRACTION: #{self.fraction}, returned FRACTION: #{1 / self.fraction}"
+      return 1 / self.fraction
+    end
 
     # Create a new +Currency+ object.
     #
