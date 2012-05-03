@@ -232,6 +232,18 @@ class Money
   def to_d
     amount
   end
+  
+  # Conversation to +self+.
+  #
+  # @return [self]
+  def to_money(given_currency = nil)
+    given_currency = Currency.wrap(given_currency) if given_currency
+    if given_currency.nil? || self.currency == given_currency
+      self
+    else
+      exchange_to(given_currency)
+    end
+  end
 
   # Return the amount of money as a float. Floating points cannot guarantee
   # precision. Therefore, this function should only be used when you no longer

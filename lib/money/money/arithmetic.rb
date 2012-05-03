@@ -47,7 +47,7 @@ class Money
       if other_money.respond_to?(:to_money)
         other_money = other_money.to_money
         if self.currency == other_money.currency
-          amount <=> other_money.amount
+          self.amount <=> other_money.amount
         else
           amount <=> other_money.exchange_to(currency).amount
         end

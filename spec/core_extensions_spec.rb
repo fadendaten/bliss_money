@@ -6,21 +6,21 @@ describe Money, "core extensions" do
     describe "#to_money" do
       it "work as documented" do
         money = 1234.to_money
-        money.amount.should == 1234_00
+        money.amount.should == 1234.0
         money.currency.should == Money.default_currency
 
         money = 100.37.to_money
-        money.amount.should == 100_37
+        money.amount.should == 100.37
         money.currency.should == Money.default_currency
 
         money = BigDecimal.new('1234').to_money
-        money.amount.should == 1234_00
+        money.amount.should == 1234.0
         money.currency.should == Money.default_currency
       end
 
       it "accepts optional currency" do
-        1234.to_money('USD').should == Money.new(123400, 'USD')
-        1234.to_money('EUR').should == Money.new(123400, 'EUR')
+        1234.to_money('USD').should == Money.new(1234, 'USD')
+        1234.to_money('EUR').should == Money.new(1234, 'EUR')
       end
 
       it "respects :subunit_to_unit currency property" do
@@ -31,7 +31,7 @@ describe Money, "core extensions" do
 
       specify "GH-15" do
         amount = 555.55.to_money
-        amount.should == Money.new(55555)
+        amount.should == Money.new(555.55)
       end
     end
   end
