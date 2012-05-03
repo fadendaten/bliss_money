@@ -203,8 +203,8 @@ describe Money, "formatting" do
 
     describe ":html option" do
       specify "(:html => true) works as documented" do
-        string = Money.cus_dollar(5.70).format(:html => true, :with_currency => true)
-        string.should == "$5.70 <span class=\"currency\">CAD</span>"
+        string = Money.us_dollar(5.70).format(:html => true, :with_currency => true)
+        string.should == "$5.70 <span class=\"currency\">USD</span>"
       end
 
       specify "should fallback to symbol if entity is not available" do
