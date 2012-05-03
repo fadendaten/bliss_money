@@ -77,36 +77,19 @@ describe Money, "formatting" do
   end
 
   describe "#format" do
-    context "Locale :ja" do
-      before { @_locale = I18n.locale; I18n.locale = :ja }
-
-      it "formats Japanese currency in Japanese properly" do
-        Money.new(1000, "JPY").format.should == "1,000円"
-      end
-
-      after  { I18n.locale = @_locale }
-    end
-
-    it "returns the monetary value as a string" do
-      Money.ca_dollar(100).format.should == "$1.00"
-      Money.new(40008).format.should == "$400.08"
-    end
 
     it "respects :subunit_to_unit currency property" do
-      Money.new(10_00, "BHD").format.should == "ب.د1.000"
+      Money.new(10_00, "CHF").format.should == "Fr1,000.00"
     end
 
     it "does not display a decimal when :subunit_to_unit is 1" do
-      Money.new(10_00, "CLP").format.should == "$1.000"
+      Money.new(10_00, "USD").format.should == "$1.000"
     end
 
     it "respects the thousands_separator and decimal_mark defaults" do
       one_thousand = Proc.new do |currency|
         Money.new(1000_00, currency).format
       end
-
-      # Pounds
-      one_thousand["GBP"].should == "£1,000.00"
 
       # Dollars
       one_thousand["USD"].should == "$1,000.00"
@@ -115,25 +98,9 @@ describe Money, "formatting" do
       one_thousand["NZD"].should == "$1,000.00"
       one_thousand["ZWD"].should == "$1,000.00"
 
-      # Yen
-      one_thousand["JPY"].should == "¥100,000"
-      one_thousand["CNY"].should == "¥1,000.00"
-
       # Euro
       one_thousand["EUR"].should == "€1.000,00"
 
-      # Rupees
-      one_thousand["INR"].should == "₨1,000.00"
-      one_thousand["NPR"].should == "₨1,000.00"
-      one_thousand["SCR"].should == "1,000.00 ₨"
-      one_thousand["LKR"].should == "1,000.00 ₨"
-
-      # Brazilian Real
-      one_thousand["BRL"].should == "R$ 1.000,00"
-
-      # Other
-      one_thousand["SEK"].should == "kr1,000.00"
-      one_thousand["GHC"].should == "₵1,000.00"
     end
 
     it "inserts commas into the result if the amount is sufficiently large" do
@@ -148,49 +115,7 @@ describe Money, "formatting" do
 
     describe ":with_currency option" do
       specify "(:with_currency option => true) works as documented" do
-        Money.ca_dollar(100).format(:with_currency => true).should == "$1.00 CAD"
-        Money.us_dollar(85).format(:with_currency => true).should == "$0.85 USD"
-      end
-    end
-
-    describe ":no_cents option" do
-      specify "(:with_currency option => true) works as documented" do
-        Money.ca_dollar(100).format(:no_cents => true).should == "$1"
-        Money.ca_dollar(599).format(:no_cents => true).should == "$5"
-        Money.ca_dollar(570).format(:no_cents => true, :with_currency => true).should == "$5 CAD"
-        Money.ca_dollar(39000).format(:no_cents => true).should == "$390"
-      end
-
-      it "respects :subunit_to_unit currency property" do
-        Money.new(10_00, "BHD").format(:no_cents => true).should == "ب.د1"
-      end
-    end
-
-    describe ":no_cents_if_whole option" do
-      specify "(:no_cents_if_whole => true) works as documented" do
-        Money.new(10000, "VUV").format(:no_cents_if_whole => true, :symbol => false).should == "10,000"
-        Money.new(10034, "VUV").format(:no_cents_if_whole => true, :symbol => false).should == "10,034"
-        Money.new(10000, "MGA").format(:no_cents_if_whole => true, :symbol => false).should == "2,000"
-        Money.new(10034, "MGA").format(:no_cents_if_whole => true, :symbol => false).should == "2,006.4"
-        Money.new(10000, "VND").format(:no_cents_if_whole => true, :symbol => false).should == "1.000"
-        Money.new(10034, "VND").format(:no_cents_if_whole => true, :symbol => false).should == "1.003,4"
-        Money.new(10000, "USD").format(:no_cents_if_whole => true, :symbol => false).should == "100"
-        Money.new(10034, "USD").format(:no_cents_if_whole => true, :symbol => false).should == "100.34"
-        Money.new(10000, "IQD").format(:no_cents_if_whole => true, :symbol => false).should == "10"
-        Money.new(10034, "IQD").format(:no_cents_if_whole => true, :symbol => false).should == "10.034"
-      end
-
-      specify "(:no_cents_if_whole => false) works as documented" do
-        Money.new(10000, "VUV").format(:no_cents_if_whole => false, :symbol => false).should == "10,000"
-        Money.new(10034, "VUV").format(:no_cents_if_whole => false, :symbol => false).should == "10,034"
-        Money.new(10000, "MGA").format(:no_cents_if_whole => false, :symbol => false).should == "2,000.0"
-        Money.new(10034, "MGA").format(:no_cents_if_whole => false, :symbol => false).should == "2,006.4"
-        Money.new(10000, "VND").format(:no_cents_if_whole => false, :symbol => false).should == "1.000,0"
-        Money.new(10034, "VND").format(:no_cents_if_whole => false, :symbol => false).should == "1.003,4"
-        Money.new(10000, "USD").format(:no_cents_if_whole => false, :symbol => false).should == "100.00"
-        Money.new(10034, "USD").format(:no_cents_if_whole => false, :symbol => false).should == "100.34"
-        Money.new(10000, "IQD").format(:no_cents_if_whole => false, :symbol => false).should == "10.000"
-        Money.new(10034, "IQD").format(:no_cents_if_whole => false, :symbol => false).should == "10.034"
+        Money.us_dollar(85).format(:with_currency => true).should == "$85.00 USD"
       end
     end
 
@@ -347,100 +272,6 @@ describe Money, "formatting" do
         money.format(:display_free => 'gratis').should == 'gratis'
       end
     end
-
-    it "brute forces :subunit_to_unit = 1" do
-      ("0".."9").each do |amt|
-        amt.to_money("VUV").format(:symbol => false).should == amt
-      end
-      ("-1".."-9").each do |amt|
-        amt.to_money("VUV").format(:symbol => false).should == amt
-      end
-      "1000".to_money("VUV").format(:symbol => false).should == "1,000"
-      "-1000".to_money("VUV").format(:symbol => false).should == "-1,000"
-    end
-
-    it "brute forces :subunit_to_unit = 5" do
-      ("0.0".."9.4").each do |amt|
-        next if amt[-1].to_i > 4
-        amt.to_money("MGA").format(:symbol => false).should == amt
-      end
-      ("-0.1".."-9.4").each do |amt|
-        next if amt[-1].to_i > 4
-        amt.to_money("MGA").format(:symbol => false).should == amt
-      end
-      "1000.0".to_money("MGA").format(:symbol => false).should == "1,000.0"
-      "-1000.0".to_money("MGA").format(:symbol => false).should == "-1,000.0"
-    end
-
-    it "brute forces :subunit_to_unit = 10" do
-      ("0.0".."9.9").each do |amt|
-        amt.to_money("VND").format(:symbol => false).should == amt.to_s.gsub(/\./, ",")
-      end
-      ("-0.1".."-9.9").each do |amt|
-        amt.to_money("VND").format(:symbol => false).should == amt.to_s.gsub(/\./, ",")
-      end
-      "1000.0".to_money("VND").format(:symbol => false).should == "1.000,0"
-      "-1000.0".to_money("VND").format(:symbol => false).should == "-1.000,0"
-    end
-
-    it "brute forces :subunit_to_unit = 100" do
-      ("0.00".."9.99").each do |amt|
-        amt.to_money("USD").format(:symbol => false).should == amt
-      end
-      ("-0.01".."-9.99").each do |amt|
-        amt.to_money("USD").format(:symbol => false).should == amt
-      end
-      "1000.00".to_money("USD").format(:symbol => false).should == "1,000.00"
-      "-1000.00".to_money("USD").format(:symbol => false).should == "-1,000.00"
-    end
-
-    it "brute forces :subunit_to_unit = 1000" do
-      ("0.000".."9.999").each do |amt|
-        amt.to_money("IQD").format(:symbol => false).should == amt
-      end
-      ("-0.001".."-9.999").each do |amt|
-        amt.to_money("IQD").format(:symbol => false).should == amt
-      end
-      "1000.000".to_money("IQD").format(:symbol => false).should == "1,000.000"
-      "-1000.000".to_money("IQD").format(:symbol => false).should == "-1,000.000"
-    end
-  end
-
-  context "custom currencies with 4 decimal places" do
-    before :each do
-      Money::Currency.register(JSON.parse(BAR, :symbolize_names => true))
-      Money::Currency.register(JSON.parse(EU4, :symbolize_names => true))
-    end
-
-    it "respects custom subunit to unit, decimal and thousands separator" do
-      Money.new(4, "BAR").format.should == "$0.0004"
-      Money.new(4, "EU4").format.should == "€0,0004"
-
-      Money.new(24, "BAR").format.should == "$0.0024"
-      Money.new(24, "EU4").format.should == "€0,0024"
-
-      Money.new(324, "BAR").format.should == "$0.0324"
-      Money.new(324, "EU4").format.should == "€0,0324"
-
-      Money.new(5324, "BAR").format.should == "$0.5324"
-      Money.new(5324, "EU4").format.should == "€0,5324"
-
-      Money.new(65324, "BAR").format.should == "$6.5324"
-      Money.new(65324, "EU4").format.should == "€6,5324"
-
-      Money.new(865324, "BAR").format.should == "$86.5324"
-      Money.new(865324, "EU4").format.should == "€86,5324"
-
-      Money.new(1865324, "BAR").format.should == "$186.5324"
-      Money.new(1865324, "EU4").format.should == "€186,5324"
-
-      Money.new(33310034, "BAR").format.should == "$3,331.0034"
-      Money.new(33310034, "EU4").format.should == "€3.331,0034"
-
-      Money.new(88833310034, "BAR").format.should == "$8,883,331.0034"
-      Money.new(88833310034, "EU4").format.should == "€8.883.331,0034"
-    end
-
   end
 end
 
