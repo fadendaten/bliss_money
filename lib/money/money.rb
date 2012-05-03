@@ -220,7 +220,7 @@ class Money
   # @example
   #   Money.ca_dollar(100).to_s #=> "1.00"
   def to_s
-    amount.to_s
+    "%.2f" % amount.to_f
   end
 
   # Return the amount of money as a BigDecimal.
