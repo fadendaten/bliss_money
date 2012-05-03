@@ -143,7 +143,6 @@ class Money
     def format(*rules)
       # support for old format parameters
       rules = normalize_formatting_rules(rules)
-      rules = localize_formatting_rules(rules)
 
       if amount == 0
         if rules[:display_free].respond_to?(:to_str)
@@ -244,14 +243,5 @@ class Money
       end
       rules
     end
-  end
-
-  def localize_formatting_rules(rules)
-    if currency.iso_code == "JPY" && I18n.locale == :ja
-      rules[:symbol] = "円"
-      rules[:symbol_position] = :after
-      rules[:symbol_after_without_space] = true
-    end
-    rules
   end
 end
