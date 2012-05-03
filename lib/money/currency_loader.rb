@@ -8,7 +8,6 @@ module CurrencyLoader
   # @return [Hash]
   def load_currencies
     currencies = parse_currency_file("currency.json")
-    currencies.merge! parse_currency_file("currency_bc.json")
   end
 
   private
@@ -18,4 +17,5 @@ module CurrencyLoader
     json.force_encoding(::Encoding::UTF_8) if defined?(::Encoding)
     JSON.parse(json, :symbolize_names => true)
   end
+  
 end

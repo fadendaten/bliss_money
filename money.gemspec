@@ -6,7 +6,7 @@ Gem::Specification.new do |s|
   s.authors     = ["Tobias Luetke", "Hongli Lai", "Jeremy McNevin",
                    "Shane Emmons", "Simone Carletti"]
   s.email       = ["semmons99+RubyMoney@gmail.com"]
-  s.homepage    = "http://rubymoney.github.com/money"
+  s.homepage    = ""
   s.summary     = "Money and currency exchange support library."
   s.description = "This library aids one in handling money and different currencies."
 

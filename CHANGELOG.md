@@ -1,5 +1,14 @@
 # Changelog
 
+## 5.0.1
+- Changed data type of 'cents' from integer to BigDecimal
+- Changed name of 'cents' attribute to 'amount'
+- Removed all 'banking' stuff since we don't need it.
+  This includes all currency conversion methods.
+- Removed parser class. We don't want to have the possibility
+  to create Money from different data types.
+
+
 ## 5.0.0
 - Minor bugfix - incorrect use of character range resulted in 
   botched results for Money::Parsing#extract_cents (GH-162)

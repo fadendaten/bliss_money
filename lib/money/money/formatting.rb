@@ -145,7 +145,7 @@ class Money
       rules = normalize_formatting_rules(rules)
       rules = localize_formatting_rules(rules)
 
-      if cents == 0
+      if amount == 0
         if rules[:display_free].respond_to?(:to_str)
           return rules[:display_free]
         elsif rules[:display_free]
@@ -170,7 +170,7 @@ class Money
 
       formatted = rules[:no_cents] ? "#{self.to_s.to_i}" : self.to_s
 
-      if rules[:no_cents_if_whole] && cents % currency.subunit_to_unit == 0
+      if rules[:no_cents_if_whole] && amount % currency.subunit_to_unit == 0
         formatted = "#{self.to_s.to_i}"
       end
 
