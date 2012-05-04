@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-describe Money, "formatting" do
+describe Money, "rounding" do
 
   BAR = '{ "priority": 1, "iso_code": "BAR", "iso_numeric": "840", "name": "Dollar with 4 decimal places", "symbol": "$", "subunit": "Cent", "subunit_to_unit": 10000, "symbol_first": true, "html_entity": "$", "decimal_mark": ".", "thousands_separator": "," }'
   EU4 = '{ "priority": 1, "iso_code": "EU4", "iso_numeric": "841", "name": "Euro with 4 decimal places", "symbol": "€", "subunit": "Cent", "subunit_to_unit": 10000, "symbol_first": true, "html_entity": "€", "decimal_mark": ",", "thousands_separator": "." }'
@@ -203,8 +203,8 @@ describe Money, "formatting" do
 
     describe ":html option" do
       specify "(:html => true) works as documented" do
-        string = Money.cus_dollar(5.70).format(:html => true, :with_currency => true)
-        string.should == "$5.70 <span class=\"currency\">CAD</span>"
+        string = Money.us_dollar(5.70).format(:html => true, :with_currency => true)
+        string.should == "$5.70 <span class=\"currency\">USD</span>"
       end
 
       specify "should fallback to symbol if entity is not available" do
@@ -240,66 +240,6 @@ describe Money, "formatting" do
         money.format(:display_free => 'gratis').should == 'gratis'
       end
     end
-<<<<<<< HEAD
-
-    it "brute forces :subunit_to_unit = 1" do
-      ("0".."9").each do |amt|
-        amt.to_money("CHF").format(:symbol => false).should == amt
-      end
-      ("-1".."-9").each do |amt|
-        amt.to_money("CHF").format(:symbol => false).should == amt
-      end
-      "1000".to_money("CHF").format(:symbol => false).should == "1,000"
-      "-1000".to_money("CHF").format(:symbol => false).should == "-1,000"
-    end
-
-    it "brute forces :subunit_to_unit = 5" do
-      ("0.0".."9.4").each do |amt|
-        next if amt[-1].to_i > 4
-        amt.to_money("MGA").format(:symbol => false).should == amt
-      end
-      ("-0.1".."-9.4").each do |amt|
-        next if amt[-1].to_i > 4
-        amt.to_money("MGA").format(:symbol => false).should == amt
-      end
-      "1000.0".to_money("MGA").format(:symbol => false).should == "1,000.0"
-      "-1000.0".to_money("MGA").format(:symbol => false).should == "-1,000.0"
-    end
-
-    it "brute forces :subunit_to_unit = 10" do
-      ("0.0".."9.9").each do |amt|
-        amt.to_money("VND").format(:symbol => false).should == amt.to_s.gsub(/\./, ",")
-      end
-      ("-0.1".."-9.9").each do |amt|
-        amt.to_money("VND").format(:symbol => false).should == amt.to_s.gsub(/\./, ",")
-      end
-      "1000.0".to_money("VND").format(:symbol => false).should == "1.000,0"
-      "-1000.0".to_money("VND").format(:symbol => false).should == "-1.000,0"
-    end
-
-    it "brute forces :subunit_to_unit = 100" do
-      ("0.00".."9.99").each do |amt|
-        amt.to_money("USD").format(:symbol => false).should == amt
-      end
-      ("-0.01".."-9.99").each do |amt|
-        amt.to_money("USD").format(:symbol => false).should == amt
-      end
-      "1000.00".to_money("USD").format(:symbol => false).should == "1,000.00"
-      "-1000.00".to_money("USD").format(:symbol => false).should == "-1,000.00"
-    end
-
-    it "brute forces :subunit_to_unit = 1000" do
-      ("0.000".."9.999").each do |amt|
-        amt.to_money("IQD").format(:symbol => false).should == amt
-      end
-      ("-0.001".."-9.999").each do |amt|
-        amt.to_money("IQD").format(:symbol => false).should == amt
-      end
-      "1000.000".to_money("IQD").format(:symbol => false).should == "1,000.000"
-      "-1000.000".to_money("IQD").format(:symbol => false).should == "-1,000.000"
-    end
-=======
->>>>>>> 786a160926e058c5b06bd534c73f6c37534f2770
   end
 end
 
