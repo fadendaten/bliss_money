@@ -49,7 +49,7 @@ class Money
         if self.currency == other_money.currency
           self.amount <=> other_money.amount
         else
-          amount <=> other_money.exchange_to(currency).amount
+          raise "Can't compare two Money objects with different currencies."
         end
       else
         raise ArgumentError, "Comparison of #{self.class} with #{other_money.inspect} failed"
@@ -96,7 +96,7 @@ class Money
       if currency == other_money.currency
         Money.new(amount + other_money.amount, other_money.currency)
       else
-        Money.new(amount + other_money.exchange_to(currency).amount, currency)
+        raise "Can't perform + on two Money objects with different currencies"
       end
     end
 
@@ -115,7 +115,7 @@ class Money
       if currency == other_money.currency
         Money.new(amount - other_money.amount, other_money.currency)
       else
-        Money.new(amount - other_money.exchange_to(currency).amount, currency)
+        raise "Can't perform - on two Money objects with different currencies"
       end
     end
 
@@ -161,7 +161,7 @@ class Money
         if currency == value.currency
           (amount / BigDecimal.new(value.amount.to_s)).to_f
         else
-          (amount / BigDecimal(value.exchange_to(currency).amount.to_s)).to_f
+          raise "Can't perform / on two Money objects with different currencies"
         end
       else
         Money.new(amount / value, currency)
@@ -194,7 +194,7 @@ class Money
     def divmod(val)
       if val.is_a?(Money)
         a = self.amount
-        b = self.currency == val.currency ? val.amount : val.exchange_to(self.currency).amount
+        b = self.currency == val.currency ? val.amount : raise "Can't perform divmod on two Money objects with different currencies"
         q, m = a.divmod(b)
         return [q, Money.new(m, self.currency)]
       else
@@ -236,7 +236,7 @@ class Money
     #   Money.new(100).remainder(9) #=> #<Money @amount=1>
     def remainder(val)
       a, b = self, val
-      b = b.exchange_to(a.currency) if b.is_a?(Money) and a.currency != b.currency
+      raise "Can't perform remainder on two Money objects with different currencies" if b.is_a?(Money) and a.currency != b.currency
 
       a_sign, b_sign = :pos, :pos
       a_sign = :neg if a.amount < 0
