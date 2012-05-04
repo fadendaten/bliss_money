@@ -194,7 +194,11 @@ class Money
     def divmod(val)
       if val.is_a?(Money)
         a = self.amount
-        b = self.currency == val.currency ? val.amount : raise "Can't perform divmod on two Money objects with different currencies"
+        if self.currency == val.currency
+          b = val.amount
+        else
+          raise "Can't perform divmod on two Money objects with different currencies"        
+        end
         q, m = a.divmod(b)
         return [q, Money.new(m, self.currency)]
       else
