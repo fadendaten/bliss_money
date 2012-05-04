@@ -96,7 +96,7 @@ class Money
       if currency == other_money.currency
         Money.new(amount + other_money.amount, other_money.currency)
       else
-        raise "Can't perform + on two Money objects with different currencies"
+        raise "Can't perform + on two Money objects with different currencies."
       end
     end
 
@@ -115,7 +115,7 @@ class Money
       if currency == other_money.currency
         Money.new(amount - other_money.amount, other_money.currency)
       else
-        raise "Can't perform - on two Money objects with different currencies"
+        raise "Can't perform - on two Money objects with different currencies."
       end
     end
 
@@ -135,7 +135,7 @@ class Money
     #
     def *(value)
       if value.is_a?(Money)
-        raise ArgumentError, "Can't multiply a Money by a Money"
+        raise ArgumentError, "Can't multiply a Money by a Money."
       else
         Money.new(amount * value, currency)
       end
@@ -161,7 +161,7 @@ class Money
         if currency == value.currency
           (amount / BigDecimal.new(value.amount.to_s)).to_f
         else
-          raise "Can't perform / on two Money objects with different currencies"
+          raise "Can't perform / on two Money objects with different currencies."
         end
       else
         Money.new(amount / value, currency)
@@ -197,7 +197,7 @@ class Money
         if self.currency == val.currency
           b = val.amount
         else
-          raise "Can't perform divmod on two Money objects with different currencies"        
+          raise "Can't perform divmod on two Money objects with different currencies."        
         end
         q, m = a.divmod(b)
         return [q, Money.new(m, self.currency)]
@@ -240,7 +240,7 @@ class Money
     #   Money.new(100).remainder(9) #=> #<Money @amount=1>
     def remainder(val)
       a, b = self, val
-      raise "Can't perform remainder on two Money objects with different currencies" if b.is_a?(Money) and a.currency != b.currency
+      raise "Can't perform remainder on two Money objects with different currencies." if b.is_a?(Money) and a.currency != b.currency
 
       a_sign, b_sign = :pos, :pos
       a_sign = :neg if a.amount < 0

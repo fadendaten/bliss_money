@@ -25,7 +25,7 @@ describe Money, "rounding" do
       chf_00_5.rounded.should == Money.new(12.50, "CHF")
     end
     
-    it "should round the value based on set fraction of currency" do
+    it "should round the amount based on set fraction of currency" do
       usd_0_01 = Money.new(12.43)
       usd_0_01.rounded.should == Money.new(12.43)
       
@@ -43,6 +43,15 @@ describe Money, "rounding" do
       usd_1_00 = Money.new(12.43)
       usd_1_00.currency.fraction = 1.00
       usd_1_00.rounded.should == Money.new(12.00)
+    end
+    
+    it "should round the amount based on passed argument" do
+      usd_0_01 = Money.new(12.43)
+      usd_0_01.rounded(0.001).should == Money.new(12.43)
+      usd_0_01 = Money.new(12.23461)
+      usd_0_01.rounded(0.001).should == Money.new(12.235)
+      
+      
     end
     
   end

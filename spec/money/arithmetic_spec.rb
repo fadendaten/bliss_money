@@ -117,16 +117,16 @@ describe Money do
 
     it "converts other object amount to current currency, then compares the two object amounts (different currency)" do
       target = Money.new(200_00, "EUR")
-      target.should_receive(:exchange_to).with(Money::Currency.new("USD")).and_return(Money.new(300_00, "USD"))
-      (Money.new(100_00, "USD") <=> target).should < 0
+      # target.should_receive(:exchange_to).with(Money::Currency.new("USD")).and_return(Money.new(300_00, "USD"))
+      lambda {(Money.new(100_00, "USD") <=> target)}.should raise_error(RuntimeError, "Can't compare two Money objects with different currencies.")
 
       target = Money.new(200_00, "EUR")
-      target.should_receive(:exchange_to).with(Money::Currency.new("USD")).and_return(Money.new(100_00, "USD"))
-      (Money.new(100_00, "USD") <=> target).should == 0
+      # target.should_receive(:exchange_to).with(Money::Currency.new("USD")).and_return(Money.new(100_00, "USD"))
+      lambda {(Money.new(100_00, "USD") <=> target)}.should raise_error(RuntimeError, "Can't compare two Money objects with different currencies.")
 
       target = Money.new(200_00, "EUR")
-      target.should_receive(:exchange_to).with(Money::Currency.new("USD")).and_return(Money.new(99_00, "USD"))
-      (Money.new(100_00, "USD") <=> target).should > 0
+      # target.should_receive(:exchange_to).with(Money::Currency.new("USD")).and_return(Money.new(99_00, "USD"))
+      lambda{(Money.new(100_00, "USD") <=> target)}.should raise_error(RuntimeError, "Can't compare two Money objects with different currencies.")
     end
 
     it "can be used to compare with a String money value" do
@@ -201,8 +201,8 @@ describe Money do
 
     it "converts other object amount to current currency and adds other amount to current amount (different currency)" do
       other = Money.new(90, "EUR")
-      other.should_receive(:exchange_to).with(Money::Currency.new("USD")).and_return(Money.new(9_00, "USD"))
-      (Money.new(10_00, "USD") + other).should == Money.new(19_00, "USD")
+      # other.should_receive(:exchange_to).with(Money::Currency.new("USD")).and_return(Money.new(9_00, "USD"))
+      lambda {(Money.new(10_00, "USD") + other)}.should raise_error(RuntimeError, "Can't perform + on two Money objects with different currencies.")
     end
   end
 
@@ -213,8 +213,8 @@ describe Money do
 
     it "converts other object amount to current currency and subtracts other amount from current amount (different currency)" do
       other = Money.new(90, "EUR")
-      other.should_receive(:exchange_to).with(Money::Currency.new("USD")).and_return(Money.new(9_00, "USD"))
-      (Money.new(10_00, "USD") - other).should == Money.new(1_00, "USD")
+      # other.should_receive(:exchange_to).with(Money::Currency.new("USD")).and_return(Money.new(9_00, "USD"))
+      lambda {(Money.new(10_00, "USD") - other)}.should raise_error(RuntimeError, "Can't perform - on two Money objects with different currencies.")
     end
   end
 
@@ -273,8 +273,8 @@ describe Money do
         {:a => Money.new(-13, :USD), :b => Money.new(-4, :EUR), :c =>  1.625},
       ]
       ts.each do |t|
-        t[:b].should_receive(:exchange_to).once.with(t[:a].currency).and_return(Money.new(t[:b].amount * 2, :USD))
-        (t[:a] / t[:b]).should == t[:c]
+        # t[:b].should_receive(:exchange_to).once.with(t[:a].currency).and_return(Money.new(t[:b].amount * 2, :USD))
+       lambda {(t[:a] / t[:b])}.should raise_error(RuntimeError, "Can't perform / on two Money objects with different currencies.")
       end
     end
   end
