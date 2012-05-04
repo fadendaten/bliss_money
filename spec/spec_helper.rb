@@ -26,5 +26,5 @@ Spork.prefork do
 end
 
 Spork.each_run do
-  require 'money'
+  require 'bliss_money'
 end
