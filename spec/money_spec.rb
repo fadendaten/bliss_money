@@ -24,6 +24,7 @@ describe Money do
       end
     end
   end
+  
 
   describe "#dollars" do
     it "returns the amount of amount as dollars" do
@@ -91,22 +92,14 @@ describe Money do
 
   describe "#to_s" do
     it "works as documented" do
-      Money.new(10_00).to_s.should == "1000.00"
-      Money.new(400_08).to_s.should == "40008.00"
-      Money.new(-237_43).to_s.should == "-23743.00"
+      Money.new(1000.34).to_s.should == "1000.34"
+      Money.new(400.80).to_s.should == "400.80"
+      Money.new(-23743).to_s.should == "-23743.00"
     end
 
-    it "respects :subunit_to_unit currency property" do
-      Money.new(10_00, "CHF").to_s.should == "1000.00"
-      Money.new(10_00, "EUR").to_s.should == "1000.00"
-    end
-
-    it "does not have decimal when :subunit_to_unit == 1" do
-      Money.new(10_00, "USD").to_s.should == "1000.00"
-    end
-
-    it "respects :decimal_mark" do
-      Money.new(10_00, "CHF").to_s.should == "1000.00"
+    it "respects :exact option" do
+      Money.new(10.1354, "CHF").to_s.should == "10.15"
+      Money.new(10.1354, "CHF").to_s(:exact => true).should == "10.1354"
     end
   end
 
