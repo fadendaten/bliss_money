@@ -118,8 +118,8 @@ class Money
   def self.euro(cents)
     Money.new(cents, "EUR")
   end
-
-
+  
+  
   # Creates a new Money object of +cents+ value in cents,
   # with given +currency+.
   #
@@ -218,9 +218,11 @@ class Money
   # @return [String]
   #
   # @example
-  #   Money.ca_dollar(100).to_s #=> "1.00"
-  def to_s
-    "%.2f" % amount.to_f
+  #   Money.new(10.2368).to_s #=> "10.24"
+  #   Money.new(10.2368).to_s #=> "10.2368"
+  def to_s(options = {})
+    return "%.2f" % amount.to_f if options[:exact]
+    "%.2f" % rounded.to_f 
   end
 
   # Return the amount of money as a BigDecimal.
@@ -253,9 +255,15 @@ class Money
   # @return [Float]
   #
   # @example
-  #   Money.us_dollar(100).to_f => 1.0
+  #   Money.new(12.5).to_f => 12.5
   def to_f
     amount.to_f
+  end
+  
+  def rounded
+    fraction = 1/ currency.fraction 
+    rounded_value = (BigDecimal.new (amount * fraction).round.to_s) /fraction
+    Money.new(rounded_value.to_s, currency)
   end
   
 end
