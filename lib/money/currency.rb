@@ -160,13 +160,8 @@ class Money
     # 1.00: round to the next dollar
     #
     # @return [Money::Currency.fraction]
-    attr_writer :fraction
+    attr_accessor :fraction
     
-    
-    def fraction
-      # puts "stored FRACTION: #{@fraction}, returned FRACTION: #{1 / @fraction}"
-      return 1/@fraction
-    end
 
     # Create a new +Currency+ object.
     #
