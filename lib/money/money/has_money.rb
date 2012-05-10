@@ -30,7 +30,7 @@ class Money
       end
 
       def exact
-        self.money.to_f
+        "%.2f" % self.money.to_f
       end
 
       def with_currency
