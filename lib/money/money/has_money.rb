@@ -7,7 +7,7 @@ class Money
     end
 
     module ClassMethods
-      def act_as_price
+      def has_money
         include InstanceMethods
       end
 
