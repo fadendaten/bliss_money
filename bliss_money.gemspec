@@ -16,14 +16,14 @@ Gem::Specification.new do |s|
   s.add_dependency "json"
 
   
-  s.add_development_dependency "rails",       "3.0.5"
-  s.add_development_dependency "rspec",       "~> 2.9.0"
-  s.add_development_dependency "yard",        "~> 0.7.5"
-  s.add_development_dependency "redcarpet",   "~> 2.1.1"
-  s.add_development_dependency "guard",       "~> 1.0.1"
-  s.add_development_dependency "spork",       "~> 0.9.0"
-  s.add_development_dependency "guard-spork", "~> 0.6.1"
-  s.add_development_dependency "guard-rspec", "~> 0.7.0"
+  s.add_development_dependency "activerecord", "3.0.5"
+  s.add_development_dependency "rspec",        "~> 2.9.0"
+  s.add_development_dependency "yard",         "~> 0.7.5"
+  s.add_development_dependency "redcarpet",    "~> 2.1.1"
+  s.add_development_dependency "guard",        "~> 1.0.1"
+  s.add_development_dependency "spork",        "~> 0.9.0"
+  s.add_development_dependency "guard-spork",  "~> 0.6.1"
+  s.add_development_dependency "guard-rspec",  "~> 0.7.0"
 
   s.requirements << "json"
 

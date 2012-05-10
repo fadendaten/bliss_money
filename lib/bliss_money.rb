@@ -23,6 +23,7 @@
 
 require 'bigdecimal'
 require 'i18n' rescue LoadError
+require 'active_record'
 require 'money/currency_loader'
 require 'money/currency'
 require 'money/money'

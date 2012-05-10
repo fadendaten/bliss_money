@@ -36,13 +36,14 @@ class Money
       def with_currency
         self.money.format(:symbol => false, :with_currency => true)
       end
+      
+      def money=(money)
+        self.price_value = money.amount
+        self.price_currency = money.currency
+      end
 
     end
   end
 end
 
-module ActiveRecord
-  class Base
-    include Money::HasMoney
-  end
-end
+ActiveRecord::Base.send :include, Money::HasMoney
