@@ -39,7 +39,7 @@ class Money
       
       def money=(money)
         self.price_value = money.amount
-        self.price_currency = money.currency
+        self.price_currency = money.currency.to_s
       end
 
     end
