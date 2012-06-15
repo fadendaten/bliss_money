@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    bliss_money (1.0.0.1)
+    bliss_money (1.0.0.2)
       i18n (~> 0.4)
       json
 
@@ -31,7 +31,7 @@ GEM
       guard (>= 0.10.0)
       spork (>= 0.8.4)
     i18n (0.6.0)
-    json (1.7.1)
+    json (1.7.3)
     rake (0.9.2.2)
     redcarpet (2.1.1)
     rspec (2.9.0)
