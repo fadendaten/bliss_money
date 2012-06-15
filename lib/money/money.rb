@@ -224,6 +224,10 @@ class Money
     return amount.to_f.to_s if options[:exact]
     "%.2f" % rounded.to_f
   end
+  
+  def with_currency
+    return "#{self.currency self.to_s}" 
+  end
 
   # Return the amount of money as a BigDecimal.
   #
