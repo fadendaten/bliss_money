@@ -34,7 +34,7 @@ class Money
       end
 
       def with_currency
-        self.money.format(:symbol => false, :with_currency => true)
+        self.money.with_currency
       end
       
       def money=(money)
