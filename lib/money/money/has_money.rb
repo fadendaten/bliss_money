@@ -26,7 +26,7 @@ class Money
       end
 
       def to_s
-        self.money.to_s
+        self.money.with_currency
       end
 
       def exact
