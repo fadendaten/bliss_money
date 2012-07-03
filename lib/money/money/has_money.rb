@@ -26,7 +26,7 @@ class Money
       end
 
       def to_s
-        self.money.format(:symbol => false, :thousands_separator => true).to_s
+        self.money.format(:thousands_seperator => true, :symbol => false)
       end
 
       def exact
@@ -34,7 +34,7 @@ class Money
       end
 
       def with_currency
-        self.money.with_currency
+        self.money.format(:with_currency => true, :thousands_seperator => true, :symbol => false)
       end
       
       def money=(money)
