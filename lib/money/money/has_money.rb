@@ -26,7 +26,7 @@ class Money
       end
 
       def to_s
-        self.money.with_currency
+        self.money.format(:symbol => false, :thousands_separator => true).to_s
       end
 
       def exact
