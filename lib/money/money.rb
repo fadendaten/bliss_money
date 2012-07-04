@@ -221,8 +221,8 @@ class Money
   #   Money.new(10.2368).to_s #=> "10.24"
   #   Money.new(10.2368).to_s :exact => true #=> "10.2368"
   def to_s(options = {})
-    return amount.to_f.to_s if options[:exact]
-    "%.2f" % rounded.to_f
+    re.to_f.to_s if options[:exact]
+    self.format(:symbol => false)
   end
   
   def with_currency
@@ -266,7 +266,7 @@ class Money
   
   def rounded(fraction = currency.fraction)
     fraction = 1 / fraction
-    rounded_value = (BigDecimal.new (amount * fraction).round.to_s) / fraction
+    rounded_value = (BigDecimal.new (self.amount * fraction).round.to_s) / fraction
     Money.new(rounded_value.to_f, currency)
   end
   

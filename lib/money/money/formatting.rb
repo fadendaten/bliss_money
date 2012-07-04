@@ -167,11 +167,11 @@ class Money
           symbol
         end
 
-      formatted = rules[:no_cents] ? "#{self.to_s.to_i}" : self.to_s
-
-      if rules[:no_cents_if_whole] && amount % currency.subunit_to_unit == 0
-        formatted = "#{self.to_s.to_i}"
-      end
+      formatted = rules[:no_cents] ? "#{self.amount.to_i}" : "%.2f" % self.rounded.to_f
+      # 
+      # if rules[:no_cents_if_whole] && amount % currency.subunit_to_unit == 0
+      #   formatted = "#{self.to_s.to_i}"
+      # end
 
       symbol_position =
         if rules.has_key?(:symbol_position)

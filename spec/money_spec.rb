@@ -92,9 +92,10 @@ describe Money do
 
   describe "#to_s" do
     it "works as documented" do
-      Money.new(1000.34).to_s.should == "1000.34"
+      Money.new(1000.34).to_s.should == "1,000.34"
       Money.new(400.80).to_s.should == "400.80"
-      Money.new(-23743).to_s.should == "-23743.00"
+      Money.new(10000.94, "CHF").to_s.should == "10'000.95"
+      Money.new(-23743).to_s.should == "-23,743.00"
     end
 
     it "respects :exact option" do
