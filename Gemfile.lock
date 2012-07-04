@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    bliss_money (1.0.0.2)
+    bliss_money (1.0.1.0)
       i18n (~> 0.4)
       json
 

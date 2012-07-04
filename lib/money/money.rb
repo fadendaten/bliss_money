@@ -221,7 +221,7 @@ class Money
   #   Money.new(10.2368).to_s #=> "10.24"
   #   Money.new(10.2368).to_s :exact => true #=> "10.2368"
   def to_s(options = {})
-    re.to_f.to_s if options[:exact]
+    return amount.to_f.to_s if options[:exact]
     self.format(:symbol => false)
   end
   
