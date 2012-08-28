@@ -210,12 +210,17 @@ class Money
            /(\d)(?=(?:\d{3})+(?:[^\d]{1}|$))/
          end
       formatted.gsub!(regexp_format, "\\1#{thousands_separator_value}")
-
+      
       if rules[:with_currency]
-        formatted << " "
-        formatted << '<span class="currency">' if rules[:html]
-        formatted << currency.to_s
-        formatted << '</span>' if rules[:html]
+        if rules[:before]
+          formatted = currency.to_s + " " + formatted
+        else
+          formatted << " "
+          formatted << '<span class="currency">' if rules[:html]
+          formatted << currency.to_s
+          formatted << '</span>' if rules[:html]
+        end
+        
       end
       formatted
     end

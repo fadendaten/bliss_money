@@ -150,7 +150,12 @@ describe Money do
   describe "#with_currecny" do
     it "returns the currency and a the value in a nice way" do
       money = Money.new(10.30, "CHF")
-      money.with_currency.should == "10.30 CHF"
+      money.with_currency.should == "CHF 10.30"
+    end
+    
+    it "returns currency after the value with the option" do
+      money = Money.new(10.30, "CHF")
+      money.with_currency({:after => true}).should == "10.30 CHF"
     end
   end
 

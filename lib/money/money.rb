@@ -225,8 +225,9 @@ class Money
     self.format(:symbol => false)
   end
   
-  def with_currency
-    return self.format(:with_currency => true, :symbol => false)
+  def with_currency(options = {})
+    return self.format(:with_currency => true, :symbol => false) if options[:after] 
+    return self.format(:with_currency => true, :symbol => false, :before => true)
   end
 
   # Return the amount of money as a BigDecimal.
