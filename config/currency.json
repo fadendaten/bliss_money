@@ -40,5 +40,19 @@
     "decimal_mark": ".",
     "thousands_separator": "'",
     "iso_numeric": "978"
+  },
+  "cad": {
+    "priority": 5,
+    "iso_code": "CAD",
+    "name": "Canadian Dollar",
+    "symbol": "$",
+    "subunit": "Cent",
+    "subunit_to_unit": 100,
+    "fraction": 0.01,
+    "symbol_first": true,
+    "html_entity": "$",
+    "decimal_mark": ".",
+    "thousands_separator": ",",
+    "iso_numeric": "124"
   }
 }
