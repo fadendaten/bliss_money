@@ -1,5 +1,8 @@
 # Changelog
 
+## 5.0.2
+- Added Norwegian Krone 'NOK' to currency JSON
+
 ## 5.0.1
 - Changed data type of 'cents' from integer to BigDecimal
 - Changed name of 'cents' attribute to 'amount'

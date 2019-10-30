@@ -69,5 +69,19 @@
     "thousands_separator": ",",
     "iso_numeric": "156",
     "smallest_denomination": 1
+  },
+  "nok": {
+    "priority": 100,
+    "iso_code": "NOK",
+    "name": "Norwegian Krone",
+    "symbol": "kr",
+    "subunit": "Øre",
+    "subunit_to_unit": 100,
+    "fraction": 0.01,
+    "symbol_first": true,
+    "html_entity": "kr",
+    "decimal_mark": ".",
+    "thousands_separator": ",",
+    "iso_numeric": "578"
   }
 }
